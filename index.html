@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil Siswa – Report TIK</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f4f6f9;
+      color: #1a1a2e;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #0d2b6e 0%, #1a4ba0 100%);
+      color: white;
+      text-align: center;
+      padding: 2.5rem 1rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.85;
+    }
+
+    header .kelas-info {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-top: 0.3rem;
+    }
+
+    /* ── MAIN CONTAINER ── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    /* ── PROFILE CARD ── */
+    .profile-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .profile-img-wrap {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: #fde8e8;
+      margin: 0 auto 1.2rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+    }
+
+    .profile-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-card h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 0.25rem;
+    }
+
+    .profile-card .school {
+      color: #555;
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .bio-list {
+      text-align: left;
+      display: inline-block;
+      font-size: 0.92rem;
+      line-height: 1.9;
+      color: #333;
+    }
+
+    .bio-list span { font-weight: 700; }
+
+    /* ── SECTION HEADINGS ── */
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0d2b6e;
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid #dde3f0;
+    }
+
+    /* ── ABOUT ── */
+    .about-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .about-section p {
+      font-size: 0.95rem;
+      line-height: 1.85;
+      color: #444;
+    }
+
+    /* ── TABLE ── */
+    .table-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .table-wrap {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    thead tr {
+      background: #0d2b6e;
+      color: white;
+    }
+
+    thead th {
+      padding: 0.9rem 1.2rem;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #eef0f5;
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f0f4ff; }
+
+    tbody td {
+      padding: 0.85rem 1.2rem;
+      text-align: center;
+      color: #333;
+    }
+
+    tbody td:nth-child(2) { text-align: left; }
+
+    .avg-row td {
+      font-weight: 700;
+      background: #f0f4ff;
+      color: #0d2b6e;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-section { margin-bottom: 2rem; }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .project-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 1.6rem 1.4rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .project-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 0.4rem;
+    }
+
+    .project-card p {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #0d2b6e;
+      color: white;
+      padding: 0.55rem 1.2rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover { background: #1a4ba0; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0d2b6e;
+      color: rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 1.2rem;
+      font-size: 0.85rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      main { padding: 1.5rem 1rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Profil Siswa Kelas X</h1>
+    <p>Mata Pelajaran TIK</p>
+  </header>
+
+  <main>
+
+    <!-- BIODATA -->
+    <div class="profile-card">
+      <div class="profile-img-wrap">🧑‍💻</div>
+      <h2>Joeffel Gracello Nelson Sihombing</h2>
+      <p class="school">Siswa SMA Kolese Kanisius</p>
+      <div class="bio-list">
+        <p><span>Kelas:</span> XIS7</p>
+        <p><span>Sekolah:</span> SMA Kolese Kanisius</p>
+        <p><span>Hobi:</span> Bermain musik &amp; games</p>
+        <p><span>Cita-cita:</span> Pengusaha</p>
+      </div>
+    </div>
+
+    <!-- TENTANG SAYA -->
+    <div class="about-section">
+      <h2 class="section-title">Tentang Saya</h2>
+      <p>
+        Saya adalah siswa kelas XIS7 SMA Kolese Kanisius Jakarta. Selama semester ini, saya telah mempelajari HTML, CSS, dan JavaScript
+        untuk membuat berbagai project website interaktif. Seperti website branding dan travel.
+      </p>
+    </div>
+
+    <!-- NILAI -->
+    <div class="table-section">
+      <h2 class="section-title">Nilai Ulangan Semester</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Materi</th>
+              <th>Nilai</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>UH 1</td>
+              <td>75</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Tugas Akhir semester 1</td>
+              <td>90</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Tugas Web Biodata</td>
+              <td>85</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Tugas Web Branding/td>
+              <td>90</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Tugas Analisis</td>
+              <td>100</td>
+            </tr>
+            <tr class="avg-row">
+              <td colspan="2">Rata-rata</td>
+              <td>88</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="projects-section">
+      <h2 class="section-title">Project Semester Ini</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3>Project 1</h3>
+          <p>Website Biodata Siswa</p>
+          <a href="C:\Users\user\Documents\Coding\web-branding tugas.html" class="btn">Lihat Project</a>
+        </div>
+        <div class="project-card">
+          <h3>Project 2</h3>
+          <p>Kalkulator JavaScript</p>
+          <a href="C:\Users\user\Documents\Coding\project2.html" class="btn">Lihat Project</a>
+        </div>
+        <div class="project-card">
+          <h3>Project 3</h3>
+          <p>To Do List App</p>
+          <a href="C:\Users\user\Documents\Coding\Project Akhir.html" class="btn">Lihat Project</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© <span id="yr"></span> Report Siswa | Joeffel Gracello N. S.</p>
+  </footer>
+
+  <script>
+    // Console log
+    console.log("Selamat datang di website Report Siswa!");
+    console.log("Nama: Nama Kamu | Kelas: X RPL 2 | Sekolah: SMK Negeri 1 Soreang");
+
+    // Dynamic year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Welcome alert
+    window.addEventListener('load', function () {
+      alert("Selamat datang di Report Siswa Joeffel");
+    });
+  </script>
+</body>
+</html>
