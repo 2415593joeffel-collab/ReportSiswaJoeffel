@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jelajah Nusantara - Galeri Wisata Indonesia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s;
+        }
+
+        /* Search & Filter */
+        .controls {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Gallery Grid */
+        .gallery {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem 4rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+            animation: fadeIn 0.6s;
+        }
+
+        .card:hover {
+            transform: translateY(-30px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .card-location {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .card-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .card-category {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 15px;
+            overflow: hidden;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s;
+        }
+
+        .modal-img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            background: #f44336;
+            color: white;
+        }
+
+        .rating {
+            color: #ffa500;
+            margin: 1rem 0;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0,0,0,0.2);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 1rem;
+            }
+
+            .modal-img {
+                height: 250px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🏝️ BestAmazing Travel</div>
+            <ul class="nav-links">
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#gallery">Galeri</a></li>
+                <li><a href="#about">Tentang</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>Jelajahi Keindahan Indonesia</h1>
+        <p>Temukan destinasi wisata terbaik dari Sabang sampai Merauke</p>
+    </section>
+
+    <div class="controls">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Cari destinasi wisata...">
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="semua">Semua</button>
+            <button class="filter-btn" data-filter="pantai">Pantai</button>
+            <button class="filter-btn" data-filter="gunung">Gunung</button>
+            <button class="filter-btn" data-filter="kota">Kota</button>
+            <button class="filter-btn" data-filter="budaya">Budaya</button>
+        </div>
+    </div>
+
+    <div class="gallery" id="gallery"></div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <img class="modal-img" id="modalImg" src="" alt="">
+            <div class="modal-body">
+                <h2 id="modalTitle"></h2>
+                <p class="card-location" id="modalLocation"></p>
+                <div class="rating" id="modalRating"></div>
+                <p id="modalDescription"></p>
+                <p><strong>Fasilitas:</strong> <span id="modalFacilities"></span></p>
+                <p><strong>Harga Tiket:</strong> <span id="modalPrice"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 BestAmazing Travel. Dibuat untuk Project Web Development</p>
+        <p>Kelompok Pt. BestAmazingTravel Tbk. Ltd. LLC.- Kelas XIS7</p>
+    </footer>
+
+    <script>
+        const destinations = [
+            {
+                id: 1,
+                name: "Pantai Kuta",
+                location: "Bali",
+                category: "pantai",
+                image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600",
+                description: "Pantai dengan pasir putih yang terkenal dengan sunset indahnya.",
+                fullDescription: "Pantai Kuta adalah salah satu pantai paling terkenal di Bali dengan pasir putih yang lembut dan ombak yang sempurna untuk berselancar. Tempat yang ideal untuk menikmati matahari terbenam yang spektakuler.",
+                rating: 5,
+                facilities: "Surfing, Restoran, Hotel, Parkir",
+                price: "Gratis"
+            },
+            {
+                id: 2,
+                name: "Gunung Bromo",
+                location: "Jawa Timur",
+                category: "gunung",
+                image: "https://i.pinimg.com/736x/d0/57/42/d057426235f0b63655bc6fc90f48837a.jpg",
+                description: "Gunung berapi aktif dengan pemandangan sunrise yang menakjubkan.",
+                fullDescription: "Gunung Bromo adalah gunung berapi aktif yang terkenal dengan pemandangan sunrise yang luar biasa. Kawah aktifnya dan lautan pasir yang luas menciptakan pemandangan yang sangat dramatis dan fotogenik.",
+                rating: 5,
+                facilities: "Jeep Tour, Camping, Warung, Penginapan",
+                price: "Rp 50.000 - Rp 300.000"
+            },
+            {
+                id: 3,
+                name: "Candi Borobudur",
+                location: "Jawa Tengah",
+                category: "budaya",
+                image: "https://i.pinimg.com/736x/70/80/e0/7080e06e854a72822e1512d03968bb1c.jpg",
+                description: "Candi Buddha terbesar di dunia yang menjadi situs warisan UNESCO.",
+                fullDescription: "Candi Borobudur adalah candi Buddha terbesar di dunia dan merupakan salah satu monumen Buddha terbesar di dunia. Dibangun pada abad ke-8, candi ini memiliki 2.672 panel relief dan 504 arca Buddha.",
+                rating: 5,
+                facilities: "Museum, Toko Souvenir, Restoran, Parkir",
+                price: "Rp 50.000 - Rp 375.000"
+            },
+            {
+                id: 4,
+                name: "Raja Ampat",
+                location: "Papua Barat",
+                category: "pantai",
+                image: "https://i.pinimg.com/1200x/a6/f6/f7/a6f6f78acd99081647225f8a7a9d6369.jpg",
+                description: "Surga bawah laut dengan keanekaragaman hayati laut terkaya di dunia.",
+                fullDescription: "Raja Ampat adalah kepulauan yang memiliki keanekaragaman hayati laut terkaya di dunia. Dengan lebih dari 1.500 spesies ikan dan 537 spesies karang, tempat ini adalah surga bagi penyelam dan pecinta alam bawah laut.",
+                rating: 5,
+                facilities: "Diving, Snorkeling, Resort, Homestay",
+                price: "Bervariasi"
+            },
+            {
+                id: 5,
+                name: "Kawah Ijen",
+                location: "Jawa Timur",
+                category: "gunung",
+                image: "https://i.pinimg.com/1200x/5e/d2/24/5ed224b28a27b03620ba7c3feb8d437f.jpg",
+                description: "Gunung dengan fenomena api biru yang langka dan danau kawah berwarna hijau tosca.",
+                fullDescription: "Kawah Ijen terkenal dengan fenomena blue fire atau api biru yang langka dan dapat dilihat saat dini hari. Danau kawahnya yang berwarna hijau tosca yang indah merupakan danau kawah terasam di dunia.",
+                rating: 5,
+                facilities: "Pendakian, Guide, Masker Gas, Warung",
+                price: "Rp 5.000 - Rp 100.000"
+            },
+            {
+                id: 6,
+                name: "Kota Tua Jakarta",
+                location: "Jakarta",
+                category: "kota",
+                image: "https://i.pinimg.com/736x/8c/7a/bb/8c7abbe0b5a63e16d96f5c037a7474a3.jpg",
+                description: "Kawasan bersejarah dengan bangunan kolonial Belanda yang ikonik.",
+                fullDescription: "Kota Tua Jakarta adalah kawasan bersejarah yang menampilkan arsitektur kolonial Belanda. Tempat ini menjadi saksi bisu perjalanan sejarah Jakarta dari masa ke masa dan kini menjadi destinasi wisata favorit.",
+                rating: 4,
+                facilities: "Museum, Kafe, Rental Sepeda, Parkir",
+                price: "Gratis (Museum berbayar)"
+            },
+            {
+                id: 7,
+                name: "Danau Toba",
+                location: "Sumatera Utara",
+                category: "pantai",
+                image: "https://i.pinimg.com/1200x/16/4b/cd/164bcd19d29d948560dd963daefc6314.jpg",
+                description: "Danau vulkanik terbesar di Asia Tenggara dengan Pulau Samosir di tengahnya.",
+                fullDescription: "Danau Toba adalah danau vulkanik terbesar di dunia yang terbentuk dari letusan gunung berapi super masif ribuan tahun lalu. Di tengahnya terdapat Pulau Samosir yang memiliki budaya Batak yang kaya.",
+                rating: 5,
+                facilities: "Hotel, Restoran, Water Sport, Boat",
+                price: "Gratis (aktivitas berbayar)"
+            },
+            {
+                id: 8,
+                name: "Taman Mini Indonesia Indah",
+                location: "Jakarta",
+                category: "budaya",
+                image: "https://i.pinimg.com/736x/d5/3b/f9/d53bf9e3b2c73c6d71fffe248b5bf8d6.jpg",
+                description: "Miniatur kebudayaan Indonesia dengan anjungan dari 34 provinsi.",
+                fullDescription: "Taman Mini Indonesia Indah (TMII) menampilkan miniatur rumah adat dan kebudayaan dari seluruh provinsi di Indonesia. Tempat ini menjadi edukasi yang sempurna untuk mengenal kekayaan budaya Nusantara.",
+                rating: 4,
+                facilities: "Museum, Theater, Restoran, Transportasi Internal",
+                price: "Rp 15.000 - Rp 25.000"
+            },
+            {
+                id: 9,
+                name: "Labuan Bajo",
+                location: "Nusa Tenggara Timur",
+                category: "pantai",
+                image: "https://i.pinimg.com/1200x/69/ca/dd/69cadd00d328c76fad36979f684e248a.jpg",
+                description: "Gerbang menuju Taman Nasional Komodo dengan pantai-pantai eksotis.",
+                fullDescription: "Labuan Bajo adalah kota pelabuhan yang menjadi pintu gerbang menuju Taman Nasional Komodo. Selain komodo, tempat ini menawarkan pantai-pantai indah, spot diving kelas dunia, dan pemandangan sunset yang memukau.",
+                rating: 5,
+                facilities: "Hotel, Diving Center, Boat Tour, Restoran",
+                price: "Bervariasi"
+            }
+        ];
+
+        let currentFilter = 'semua';
+
+        function renderGallery(items) {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+            
+            items.forEach(dest => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openModal(dest);
+                
+                card.innerHTML = `
+                    <img class="card-img" src="${dest.image}" alt="${dest.name}">
+                    <div class="card-content">
+                        <h3 class="card-title">${dest.name}</h3>
+                        <p class="card-location">📍 ${dest.location}</p>
+                        <p class="card-description">${dest.description}</p>
+                        <span class="card-category">${dest.category.toUpperCase()}</span>
+                    </div>
+                `;
+                
+                gallery.appendChild(card);
+            });
+        }
+
+        function filterDestinations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = destinations;
+            
+            if (currentFilter !== 'semua') {
+                filtered = filtered.filter(d => d.category === currentFilter);
+            }
+            
+            if (searchTerm) {
+                filtered = filtered.filter(d => 
+                    d.name.toLowerCase().includes(searchTerm) ||
+                    d.location.toLowerCase().includes(searchTerm) ||
+                    d.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderGallery(filtered);
+        }
+
+        function openModal(dest) {
+            const modal = document.getElementById('modal');
+            document.getElementById('modalImg').src = dest.image;
+            document.getElementById('modalTitle').textContent = dest.name;
+            document.getElementById('modalLocation').innerHTML = `📍 ${dest.location}`;
+            document.getElementById('modalRating').innerHTML = '⭐'.repeat(dest.rating);
+            document.getElementById('modalDescription').textContent = dest.fullDescription;
+            document.getElementById('modalFacilities').textContent = dest.facilities;
+            document.getElementById('modalPrice').textContent = dest.price;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Event Listeners
+        document.getElementById('searchInput').addEventListener('input', filterDestinations);
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.getAttribute('data-filter');
+                filterDestinations();
+            });
+        });
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Initial render
+        renderGallery(destinations);
+    </script>
+</body>
+</html> 
